@@ -1,26 +1,41 @@
 package com.hotelbookingsystem.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
 public class Employee extends Person {
 
-    private int idEmployee;
-    private String cargo;
 
-    public int getIdEmployee() {
-        return idEmployee;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private RoleType role;
+
+    private double salary;
+
+    private String contractType;
+
+
+    public RoleType getRole() {
+        return role;
     }
 
-    public void setIdEmployee(int idEmployee) {
-        this.idEmployee = idEmployee;
+    public void setRole(RoleType role) {
+        this.role = role;
     }
 
-    public String getCargo() {
-        return cargo;
+    public double getSalary() {
+        return salary;
     }
 
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public String getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
     }
 }

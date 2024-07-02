@@ -4,30 +4,31 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
-@MappedSuperclass //la marca como clase padre
+//@MappedSuperclass //la marca como clase padre
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_person",nullable = false)
-    private int id;
-    @Column(name = "name", nullable = false)
+    private Integer id;
+    @Column(name = "name")
     private String name;
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
     @Column(name = "direction")
     private String direction;
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private int phone;
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "birthday", nullable = false)
     private Date birthday;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

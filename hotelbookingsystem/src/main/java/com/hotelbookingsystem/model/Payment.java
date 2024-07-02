@@ -22,6 +22,9 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "id_service_consumption")
     private ServiceConsumption serviceConsumption;
+    @ManyToOne
+    @JoinColumn(name = "id_client")
+    private Client client;
 
     public int getIdPayment() {
         return idPayment;
@@ -69,5 +72,13 @@ public class Payment {
 
     public void setServiceConsumption(ServiceConsumption serviceConsumption) {
         this.serviceConsumption = serviceConsumption;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
