@@ -1,21 +1,23 @@
 package com.hotelbookingsystem.model;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
 @Entity
+@Table(name = "role")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_role")
     private Integer id;
-
+    @Column(name = "role", nullable = true)
     private String role;
     @Column(name = "description_role")
     private String descriptionRole;
 
-    @OneToMany
+    @OneToMany(mappedBy = "role")
     private List<Employee> employees;
 
     public Integer getId() {

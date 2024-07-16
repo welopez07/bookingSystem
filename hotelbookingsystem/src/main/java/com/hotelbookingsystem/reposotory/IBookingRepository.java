@@ -19,6 +19,8 @@ public interface IBookingRepository extends JpaRepository<Booking, Integer> {
                                            @Param("startDate") LocalDateTime startDate,
                                            @Param("endDate") LocalDateTime endDate);
 
+
     List<Booking> findByClientId(Integer idClient);
+
 
 }

@@ -6,10 +6,12 @@ import java.util.Date;
 
 //@MappedSuperclass //la marca como clase padre
 @Entity
+@Table(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
     @Column(name = "name")
     private String name;
@@ -19,9 +21,9 @@ public abstract class Person {
     private String direction;
     @Column(name = "phone")
     private int phone;
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "birthday")
     private Date birthday;
 
     public Integer getId() {

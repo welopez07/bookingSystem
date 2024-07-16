@@ -1,25 +1,26 @@
-package com.hotelbookingsystem.model;
+package com.hotelbookingsystem.dto;
 
-import jakarta.persistence.*;
+import com.hotelbookingsystem.model.RoleType;
 
-@Entity
-@Table(name = "employee")
-public class Employee extends Person {
-
-    @JoinColumn(name = "id_role")
-    @ManyToOne
-    private Role role;
-    @Column(name = "salary")
+public class EmployeeRequest {
+    private String name;
+    private RoleType role;
     private double salary;
-    @Column(name = "contract_type")
     private String contractType;
 
+    public String getName() {
+        return name;
+    }
 
-    public Role getRole() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public RoleType getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(RoleType role) {
         this.role = role;
     }
 

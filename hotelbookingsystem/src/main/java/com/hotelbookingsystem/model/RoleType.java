@@ -15,13 +15,6 @@ public enum RoleType {
         return description;
     }
 
-    public boolean canAccessAdminPanel(){
-        return this == ADMIN;
-    }
-
-    public boolean canEditBookings(){
-        return this == ADMIN || this == RECEPCIONIST;
-    }
 
 
 }

@@ -19,13 +19,15 @@ public class BookingController {
 
     @PostMapping("/bookRoom")
     public String bookRoom(@RequestBody BookingRequest bookingRequest) {
+        System.out.println(("Received bookingRequest: " + bookingRequest ));
 
         Integer idClient = bookingRequest.getIdClient();
         if (idClient == null) {
             throw new IllegalArgumentException("idClient no puede ser nulo");
         }
 
-        boolean bookingSuccess = bookingService.bookingRoomByClient(idClient,
+        boolean bookingSuccess = bookingService.bookingRoomByClient(
+                idClient,
                 bookingRequest.getIdRoom(),
                 bookingRequest.getStartDay(),
                 bookingRequest.getEndDay());
