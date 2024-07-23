@@ -55,7 +55,7 @@ public class RoleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<RoleResponse> updateRole(@PathVariable Integer id, @RequestBody Role role) {
-        boolean isUpdated = roleService.updateRole(id, role.getRole(), role.getDescriptionRole());
+        boolean isUpdated = roleService.updateRole(id, role.getRoleType(), role.getDescriptionRole());
         RoleResponse response = new RoleResponse();
         if (isUpdated) {
             response.setInserted(true);

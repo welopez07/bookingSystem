@@ -1,13 +1,15 @@
 package com.hotelbookingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
 
 @Entity
 @Table(name = "employee")
 public class Employee extends Person {
-
-    @JoinColumn(name = "id_role")
     @ManyToOne
+    @JoinColumn(name = "id_role")
+    @JsonBackReference//se usa en la entidad que contiene la referencia inversa
     private Role role;
     @Column(name = "salary")
     private double salary;

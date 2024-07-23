@@ -33,12 +33,12 @@ public class RoleService {
     public List<Role> getAllRoles(){
         return iRoleRepository.findAll();
     }
-    public boolean updateRole(Integer id, String roleName, String descriptionRole){
+    public boolean updateRole(Integer id, RoleType roleType, String description){
         Optional<Role> optionalRole = iRoleRepository.findById(id);
         if (optionalRole.isPresent()){
             Role role = optionalRole.get();
-            role.setRole(roleName);
-            role.setDescriptionRole(descriptionRole);
+            role.setRoleType(roleType);
+            role.setDescriptionRole(description);
             iRoleRepository.save(role);
             return true;
         }

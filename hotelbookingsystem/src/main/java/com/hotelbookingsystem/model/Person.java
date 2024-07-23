@@ -1,7 +1,9 @@
 package com.hotelbookingsystem.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 //@MappedSuperclass //la marca como clase padre
@@ -20,11 +22,12 @@ public abstract class Person {
     @Column(name = "direction")
     private String direction;
     @Column(name = "phone")
-    private int phone;
+    private String phone;
     @Column(name = "email")
     private String email;
     @Column(name = "birthday")
-    private Date birthday;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthday;
 
     public Integer getId() {
         return id;
@@ -58,11 +61,11 @@ public abstract class Person {
         this.direction = direction;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -74,11 +77,11 @@ public abstract class Person {
         this.email = email;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 }

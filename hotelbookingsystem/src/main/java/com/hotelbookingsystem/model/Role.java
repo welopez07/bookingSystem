@@ -1,8 +1,10 @@
 package com.hotelbookingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,15 +12,17 @@ import java.util.List;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_role")
+    @Column(name = "id")
     private Integer id;
-    @Column(name = "role", nullable = true)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_type")
+    private RoleType roleType;
     @Column(name = "description_role")
     private String descriptionRole;
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference//se usa en la entidad propietaria de la relacion
+    private List<Employee> employees = new ArrayList<>();
 
-    @OneToMany(mappedBy = "role")
-    private List<Employee> employees;
 
     public Integer getId() {
         return id;
@@ -28,12 +32,12 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public RoleType getRoleType() {
+        return roleType;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
     }
 
     public String getDescriptionRole() {
