@@ -27,7 +27,7 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<Employee> addEmployee(@RequestBody EmployeeRequest employeeRequest){
         Employee employee = employeeService.addEmployee(employeeRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
+        return new ResponseEntity<>(employee, HttpStatus.CREATED);
 
     }
     @GetMapping
@@ -38,22 +38,17 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id){
         Optional<Employee> employee = employeeService.getEmployeeById(id);
-        return employee.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return employee.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeRequest employeeRequest){
-        Optional<Employee> updatedEmployee = employeeService.updateEmployee(id, employeeRequest);
-        return updatedEmployee.map(employee -> new ResponseEntity<>(employee, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Employee employee = employeeService.updateEmployee(id, employeeRequest);
+        return ResponseEntity.ok(employee);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Integer id){
-        boolean isDeleted = employeeService.deleteEmployee(id);
-        if(isDeleted){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

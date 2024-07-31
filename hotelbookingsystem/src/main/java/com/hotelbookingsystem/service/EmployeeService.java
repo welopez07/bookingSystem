@@ -25,6 +25,8 @@ public class EmployeeService {
     }
     public Employee addEmployee(EmployeeRequest employeeRequest){
         Employee employee = new Employee();
+        Role role = iRoleRepository.findById(employeeRequest.getRoleId()).orElseThrow(()-> new RuntimeException("Role not found"));
+        employee.setRole(role);
         employee.setName(employeeRequest.getName());
         employee.setLastName(employeeRequest.getLastName());
         employee.setEmail(employeeRequest.getEmail());
@@ -33,10 +35,6 @@ public class EmployeeService {
         employee.setBirthday(employeeRequest.getBirthday());
         employee.setSalary(employeeRequest.getSalary());
         employee.setContractType(employeeRequest.getContractType());
-
-        Role role = iRoleRepository.findById(employeeRequest.getRoleId()).orElseThrow(()-> new IllegalArgumentException("Invalid role ID: " + employeeRequest.getRoleId()));
-
-        employee.setRole(role);
         return iEmployeeRepository.save(employee);
     }
 
@@ -48,24 +46,25 @@ public class EmployeeService {
         return iEmployeeRepository.findById(id);
     }
 
-    public Optional<Employee> updateEmployee(Integer id, EmployeeRequest employeeRequest){
-        return iEmployeeRepository.findById(id).map(employee -> {
-            employee.setName(employeeRequest.getName());
-            employee.setSalary(employeeRequest.getSalary());
-            employee.setContractType(employeeRequest.getContractType());
+    public Employee updateEmployee(Integer id, EmployeeRequest employeeRequest){
+        Employee employee = iEmployeeRepository.findById(id).orElseThrow(()-> new RuntimeException("Employee not found"));
+        Role role = iRoleRepository.findById(employeeRequest.getRoleId()).orElseThrow(()-> new RuntimeException("Role not found"));
+        employee.setRole(role);
 
-            Role role = iRoleRepository.findById(employeeRequest.getRoleId()).orElseThrow(() -> new IllegalArgumentException("Role not found"));
-            employee.setRole(role);
-            return iEmployeeRepository.save(employee);
-        });
+        employee.setName(employeeRequest.getName());
+        employee.setLastName(employeeRequest.getLastName());
+        employee.setDirection(employeeRequest.getDirection());
+        employee.setPhone(employeeRequest.getPhone());
+        employee.setEmail(employeeRequest.getEmail());
+        employee.setBirthday(employeeRequest.getBirthday());
+        employee.setSalary(employeeRequest.getSalary());
+        employee.setContractType(employeeRequest.getContractType());
+        return  iEmployeeRepository.save(employee);
     }
 
-    public boolean  deleteEmployee(Integer id){
-        if(iEmployeeRepository.existsById(id)){
-            iEmployeeRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteEmployee(Integer id){
+        Employee employee = iEmployeeRepository.findById(id).orElseThrow(()-> new RuntimeException("Employed not found"));
+        iEmployeeRepository.delete(employee);
     }
 
     public boolean hasAdminAccess(Employee employee){

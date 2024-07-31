@@ -18,39 +18,30 @@ public class RoleService {
     @Autowired
     private IRoleRepository iRoleRepository;
 
-    public boolean addRole(Role role){
-        try{
-            iRoleRepository.save(role);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
+    public Role addRole(RoleType roleType, String descriptionRole){
+        Role role = new Role();
+        role.setRoleType(roleType);
+        role.setDescriptionRole(descriptionRole);
+        return iRoleRepository.save(role);
+
     }
-    public Optional<Role> getById(Integer id){//Optional evita errores con los valores null
+    public Optional<Role> getRoleById(Integer id){//Optional evita errores con los valores null
         return iRoleRepository.findById(id);
     }
 
     public List<Role> getAllRoles(){
         return iRoleRepository.findAll();
     }
-    public boolean updateRole(Integer id, RoleType roleType, String description){
-        Optional<Role> optionalRole = iRoleRepository.findById(id);
-        if (optionalRole.isPresent()){
-            Role role = optionalRole.get();
-            role.setRoleType(roleType);
-            role.setDescriptionRole(description);
-            iRoleRepository.save(role);
-            return true;
-        }
-        return false;
+    public Role updateRole(Integer id, RoleType roleType, String descriptionRole){
+        Role role = iRoleRepository.findById(id).orElseThrow(()-> new RuntimeException("Role not found"));
+        role.setRoleType(roleType);
+        role.setDescriptionRole(descriptionRole);
+        return iRoleRepository.save(role);
     }
-    public Boolean deleteRole(Integer id){
-        Optional<Role> optionalRole = iRoleRepository.findById(id);
-        if (optionalRole.isPresent()){
-            iRoleRepository.deleteById(id);
-            return true;
-        }
-        return false;
+
+    public void deleteRole(Integer id){
+        Role role = iRoleRepository.findById(id).orElseThrow(()-> new RuntimeException("Role not found"));
+        iRoleRepository.delete(role);
     }
 
 }

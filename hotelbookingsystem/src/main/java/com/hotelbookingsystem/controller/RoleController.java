@@ -1,8 +1,11 @@
 package com.hotelbookingsystem.controller;
 
+import com.hotelbookingsystem.dto.RoleRequest;
 import com.hotelbookingsystem.dto.RoleResponse;
 import com.hotelbookingsystem.model.Client;
 import com.hotelbookingsystem.model.Role;
+import com.hotelbookingsystem.model.RoleType;
+import com.hotelbookingsystem.reposotory.IRoleRepository;
 import com.hotelbookingsystem.service.ClientService;
 import com.hotelbookingsystem.service.RoleService;
 import org.springframework.http.HttpStatus;
@@ -17,35 +20,25 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/roles")
 public class RoleController {
+
+    private final RoleService roleService;
+
+
     @Autowired
-    private RoleService roleService;
+    public RoleController(RoleService roleService){
+        this.roleService = roleService;
+    }
 
     @PostMapping()
-    public ResponseEntity<RoleResponse> addRole(@RequestBody Role role){
-        boolean response = roleService.addRole(role);
-        RoleResponse roleResponse = new RoleResponse();
-
-        if (response) {
-            roleResponse.setInserted(true);
-            roleResponse.setCodeError("200");
-            roleResponse.setMessage("Se inserto con exito");
-        } else {
-            roleResponse.setInserted(false);
-            roleResponse.setCodeError("500");
-            roleResponse.setMessage("No se pudo insertar el rol, consulte el administrador");
-        }
-
-        return ResponseEntity.ok(roleResponse);
+    public ResponseEntity<Role> addRole(@RequestBody RoleRequest roleRequest){
+        Role role = roleService.addRole(roleRequest.getRoleType(), roleRequest.getDescriptionRole());
+        return new ResponseEntity<>(role,HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Role> getRoleById(@PathVariable Integer id) {
-        Optional<Role> optionalRole = roleService.getById(id);
-        if (optionalRole.isPresent()) {
-            return ResponseEntity.ok(optionalRole.get()); // devuelve el detalle de cada rol
-        } else {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // respnde con 404 Not Found
-        }
+        Optional<Role> role = roleService.getRoleById(id);
+        return role.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
     }
     @GetMapping()
     public ResponseEntity<List<Role>> getAllRoles(){
@@ -54,36 +47,14 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RoleResponse> updateRole(@PathVariable Integer id, @RequestBody Role role) {
-        boolean isUpdated = roleService.updateRole(id, role.getRoleType(), role.getDescriptionRole());
-        RoleResponse response = new RoleResponse();
-        if (isUpdated) {
-            response.setInserted(true);
-            response.setCodeError("0");
-            response.setMessage("Role updated successfully");
-            return ResponseEntity.ok(response); // envia un mensaje de tipo 200 OK
-        } else {
-            response.setInserted(false);
-            response.setCodeError("1");
-            response.setMessage("Failed to update role");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // envia  500 Internal Server Error
-        }
+    public ResponseEntity<Role> updateRole(@PathVariable Integer id, @RequestBody RoleRequest roleRequest){
+        Role role = roleService.updateRole(id, roleRequest.getRoleType(), roleRequest.getDescriptionRole());
+        return ResponseEntity.ok(role);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RoleResponse> deleteRole(@PathVariable Integer id) {
-        boolean isDeleted = roleService.deleteRole(id);
-        RoleResponse response = new RoleResponse();
-        if (isDeleted) {
-            response.setInserted(true);
-            response.setCodeError("0");
-            response.setMessage("Role deleted successfully");
-            return ResponseEntity.ok(response); // responde un mensaje 200 OK, eliminado exitoso
-        } else {
-            response.setInserted(false);
-            response.setCodeError("1");
-            response.setMessage("Failed to delete role");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // envia  500 Internal Server Error
-        }
+    public ResponseEntity<Void> deleteRole(@PathVariable Integer id) {
+        roleService.deleteRole(id);
+        return ResponseEntity.noContent().build();
     }
 }
